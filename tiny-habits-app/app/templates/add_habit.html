@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Tiny Habits{% endblock %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.anchor_moment.label }}<br>
+            {{ form.anchor_moment(size=64) }}<br>
+            {% for error in form.anchor_moment.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.tiny_behavior.label }}<br>
+            {{ form.tiny_behavior(size=64) }}<br>
+            {% for error in form.tiny_behavior.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.celebration.label }}<br>
+            {{ form.celebration(size=64) }}<br>
+            {% for error in form.celebration.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

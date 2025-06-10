@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Tiny Habits{% endblock %}
+
+{% block content %}
+    <h1>Your Tiny Habits Dashboard</h1>
+    <p>Welcome, {{ current_user.username }}!</p>
+    <p><a href="{{ url_for('add_habit') }}">Add New Tiny Habit</a></p>
+
+    <hr>
+
+    <h2>Your Habits:</h2>
+    {% if habits %}
+        <ul>
+            {% for habit in habits %}
+                <li class="habit-item">
+                    <p><strong>Anchor Moment:</strong> {{ habit.anchor_moment }}</p>
+                    <p><strong>New Tiny Habit:</strong> {{ habit.tiny_behavior }}</p>
+                    <p><strong>Celebration:</strong> {{ habit.celebration }}</p>
+                    <p><strong>Created:</strong> {{ habit.creation_date.strftime('%Y-%m-%d %H:%M') }}</p>
+                    {% if habit.last_completed_date %}
+                        <p><strong>Last Completed:</strong> {{ habit.last_completed_date.strftime('%Y-%m-%d %H:%M') }}</p>
+                    {% else %}
+                        <p><strong>Last Completed:</strong> Not yet completed</p>
+                    {% endif %}
+                    <p><strong>Current Streak:</strong> {{ habit.streak }}</p>
+
+                    {% if habit.last_completed_date and habit.last_completed_date.date() == today_date %}
+                        <button type="button" class="btn btn-sm btn-info" disabled>Completed Today</button>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('complete_habit', habit_id=habit.id) }}" style="display: inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <button type="submit" class="btn btn-sm btn-success">Mark as Done for Today</button>
+                        </form>
+                    {% endif %}
+                    {# Add buttons for 'Edit/Delete' in future steps #}
+                </li>
+                {# <hr> removed as habit-item provides separation #}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't added any tiny habits yet. <a href="{{ url_for('add_habit') }}">Get started by adding one!</a></p>
+    {% endif %}
+{% endblock %}
