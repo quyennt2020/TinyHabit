@@ -22,7 +22,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        flash(f'Account created successfully for {user.username}!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -74,9 +74,9 @@ def add_habit():
 @app.route('/complete_habit/<int:habit_id>', methods=['POST'])
 @login_required
 def complete_habit(habit_id):
-    habit = Habit.query.get_or_404(habit_id)
+    habit = Habit.query.get_or_404(habit_id) # Ensures habit exists or 404s
     if habit.author != current_user:
-        abort(403) # Forbidden
+        abort(403) # Forbidden, user does not own this habit
 
     today = date.today()
 
